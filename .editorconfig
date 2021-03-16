@@ -1,0 +1,20 @@
+[*]
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+indent_style = space
+indent_size = 2
+
+[*.go]
+indent_style = tab
+
+[*.json]
+insert_final_newline = false
+
+[*.md]
+max_line_length = 79
+
+[*.py]
+max_line_length = 79
+indent_size = 4
