@@ -80,14 +80,14 @@ func TestLoadFileWithUnmarshaler(t *testing.T) {
 
 func TestLoadFromJSONFile(t *testing.T) {
 	try := assert.New(t)
-	got, err := LoadFromJSONFile("testdata/happy.json")
+	got, err := LoadFromJSONFile("testdata/good.json")
 	try.NoError(err)
 	try.Equal(Environment{"TEST_KEY": "test-value"}, got)
 }
 
 func TestLoadFromYAMLFile(t *testing.T) {
 	try := assert.New(t)
-	got, err := LoadFromYAMLFile("testdata/happy.yaml")
+	got, err := LoadFromYAMLFile("testdata/good.yaml")
 	try.NoError(err)
 	try.Equal(Environment{"TEST_KEY": "test-value"}, got)
 }
