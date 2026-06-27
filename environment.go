@@ -14,7 +14,7 @@ import (
 	"os"
 	"strings"
 
-	"gopkg.in/yaml.v3"
+	"go.yaml.in/yaml/v3"
 )
 
 // Environment is just a map of environment keys to values. It doesn't have to
@@ -109,12 +109,12 @@ func (e Environment) LoadFromUnmarshaler(reader io.Reader, unmarshaler func([]by
 	return unmarshaler(data, &e)
 }
 
-// LoadFromYAML pulls YAML out of reader and into e.
-func (e Environment) LoadFromYAML(reader io.Reader) error {
+// LoadYAMLInto pulls YAML out of reader and into e.
+func (e Environment) LoadYAMLInto(reader io.Reader) error {
 	return e.LoadFromUnmarshaler(reader, yaml.Unmarshal)
 }
 
-// LoadFromJSON pulls JSON out of reader and into e.
-func (e Environment) LoadFromJSON(reader io.Reader) error {
+// LoadJSONInto pulls JSON out of reader and into e.
+func (e Environment) LoadJSONInto(reader io.Reader) error {
 	return e.LoadFromUnmarshaler(reader, json.Unmarshal)
 }

@@ -1,8 +1,9 @@
 package kv
 
 import (
+	"maps"
 	"os"
-	"sort"
+	"slices"
 )
 
 // Names maps environment-variable names to override values, and quietly falls
@@ -28,41 +29,33 @@ const expandLimit = 10
 // Expand chases down ${VAR}-style references in both the keys and values of
 // Names, looking them up in Names first and then the process environment, and
 // keeps going until the map stops changing or it hits a fixed iteration limit.
+// It never mutates the receiver — each pass works on a fresh clone, so callers
+// keep their original map untouched and get the expanded result back.
 func (names Names) Expand() Names {
 	if len(names) == 0 {
 		return names
 	}
-	limit := expandLimit
-	for limit > 0 && names.expandPass() {
-		limit--
+	expanded := maps.Clone(names)
+	for limit, changed := expandLimit, true; limit > 0 && changed; limit-- {
+		expanded, changed = expanded.expandPass()
 	}
-	return names
+	return expanded
 }
 
 // expandPass performs one expansion pass over a sorted snapshot of the keys,
 // resolving ${VAR} references via the map (then the process environment). It
-// mutates the map in place and reports whether anything changed this pass.
-func (names Names) expandPass() bool {
+// writes into a fresh map and returns it alongside whether anything changed.
+func (names Names) expandPass() (Names, bool) {
 	changed := false
-	for _, key := range names.sortedKeys() {
+	next := make(Names, len(names))
+	for _, key := range slices.Sorted(maps.Keys(names)) {
 		value := names[key]
 		x := os.Expand(key, names.Get)
 		y := os.Expand(value, names.Get)
 		changed = changed || key != x || value != y
-		names[orSelf(x, key)] = orSelf(y, value)
+		next[orSelf(x, key)] = orSelf(y, value)
 	}
-	return changed
-}
-
-// sortedKeys returns the map's keys in deterministic (ascending) order so each
-// pass visits them the same way regardless of map iteration order.
-func (names Names) sortedKeys() sort.StringSlice {
-	keys := make(sort.StringSlice, 0, len(names))
-	for key := range names {
-		keys = append(keys, key)
-	}
-	keys.Sort()
-	return keys
+	return next, changed
 }
 
 // orSelf returns expanded, falling back to original when expansion collapsed a
@@ -74,10 +67,12 @@ func orSelf(expanded, original string) string {
 	return expanded
 }
 
-// Replace swaps out ${VAR}-style references in each of values using Names.
+// Replace swaps out ${VAR}-style references in each of values using Names. It
+// returns a fresh slice and never mutates the caller's backing array.
 func (names Names) Replace(values ...string) []string {
-	for i, value := range values {
-		values[i] = os.Expand(value, names.Get)
+	replaced := slices.Clone(values)
+	for i, value := range replaced {
+		replaced[i] = os.Expand(value, names.Get)
 	}
-	return values
+	return replaced
 }

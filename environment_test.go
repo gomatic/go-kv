@@ -128,16 +128,16 @@ func TestEnvironment_LoadFromUnmarshaler(t *testing.T) {
 	})
 }
 
-func TestEnvironment_LoadFromJSON(t *testing.T) {
+func TestEnvironment_LoadJSONInto(t *testing.T) {
 	try := assert.New(t)
 	e := Environment{}
-	try.NoError(e.LoadFromJSON(strings.NewReader(`{"A":"1"}`)))
+	try.NoError(e.LoadJSONInto(strings.NewReader(`{"A":"1"}`)))
 	try.Equal(Environment{"A": "1"}, e)
 }
 
-func TestEnvironment_LoadFromYAML(t *testing.T) {
+func TestEnvironment_LoadYAMLInto(t *testing.T) {
 	try := assert.New(t)
 	e := Environment{}
-	try.NoError(e.LoadFromYAML(strings.NewReader("A: \"1\"\n")))
+	try.NoError(e.LoadYAMLInto(strings.NewReader("A: \"1\"\n")))
 	try.Equal(Environment{"A": "1"}, e)
 }
