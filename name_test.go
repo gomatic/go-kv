@@ -22,7 +22,7 @@ func TestName_ValueOr(t *testing.T) {
 		try.Equal("value", name.ValueOr("fallback"))
 	})
 
-	t.Run("absent", func(t *testing.T) {
+	t.Run("absent", func(_ *testing.T) {
 		try.Equal("fallback", Name("KV_TEST_MISSING").ValueOr("fallback"))
 	})
 }

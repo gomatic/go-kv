@@ -12,7 +12,7 @@ func TestLookupAs(t *testing.T) {
 	const key = "KV_TEST_AS"
 	try := assert.New(t)
 
-	t.Run("unset key", func(t *testing.T) {
+	t.Run("unset key", func(_ *testing.T) {
 		value, ok, err := LookupAs(key, strconv.Atoi)
 		try.False(ok)
 		try.NoError(err)
@@ -40,7 +40,7 @@ func TestGetOrAs(t *testing.T) {
 	const key = "KV_TEST_AS"
 	try := assert.New(t)
 
-	t.Run("fallback when unset", func(t *testing.T) {
+	t.Run("fallback when unset", func(_ *testing.T) {
 		try.Equal(8080, GetOrAs(key, strconv.Atoi, 8080))
 	})
 

@@ -86,8 +86,8 @@ func TestEnvironment_LookupFirst(t *testing.T) {
 
 func TestEnvironment_Set(t *testing.T) {
 	const key = "KV_TEST_SET"
-	os.Unsetenv(key)
-	t.Cleanup(func() { os.Unsetenv(key) })
+	_ = os.Unsetenv(key)
+	t.Cleanup(func() { _ = os.Unsetenv(key) })
 	try := assert.New(t)
 
 	e := Environment{key: "value"}
@@ -108,19 +108,19 @@ func TestEnvironment_Unset(t *testing.T) {
 func TestEnvironment_LoadFromUnmarshaler(t *testing.T) {
 	try := assert.New(t)
 
-	t.Run("nil reader", func(t *testing.T) {
+	t.Run("nil reader", func(_ *testing.T) {
 		e := Environment{}
 		err := e.LoadFromUnmarshaler(nil, nil)
 		try.ErrorIs(err, ErrNilReader)
 	})
 
-	t.Run("read error", func(t *testing.T) {
+	t.Run("read error", func(_ *testing.T) {
 		e := Environment{}
 		err := e.LoadFromUnmarshaler(errReader{}, nil)
 		try.ErrorIs(err, errTest)
 	})
 
-	t.Run("default unmarshaler is JSON", func(t *testing.T) {
+	t.Run("default unmarshaler is JSON", func(_ *testing.T) {
 		e := Environment{}
 		err := e.LoadFromUnmarshaler(strings.NewReader(`{"A":"1"}`), nil)
 		try.NoError(err)

@@ -10,8 +10,8 @@ import (
 
 func TestWrapCalls(t *testing.T) {
 	const key = "KV_TEST_WRAP"
-	os.Unsetenv(key)
-	t.Cleanup(func() { os.Unsetenv(key) })
+	_ = os.Unsetenv(key)
+	t.Cleanup(func() { _ = os.Unsetenv(key) })
 	try := assert.New(t)
 
 	var observed string
@@ -29,11 +29,11 @@ func TestWrapCalls(t *testing.T) {
 func TestWrapper_Call(t *testing.T) {
 	try := assert.New(t)
 
-	t.Run("nil functions are skipped", func(t *testing.T) {
+	t.Run("nil functions are skipped", func(_ *testing.T) {
 		try.NoError(Wrapper{}.Call(nil, nil))
 	})
 
-	t.Run("stops at the first error", func(t *testing.T) {
+	t.Run("stops at the first error", func(_ *testing.T) {
 		ran := false
 		err := Wrapper{}.Call(
 			func() error { return errTest },

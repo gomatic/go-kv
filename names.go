@@ -32,7 +32,9 @@ func (names Names) Expand() Names {
 	if len(names) == 0 {
 		return names
 	}
-	for limit := expandLimit; limit > 0 && names.expandPass(); limit-- {
+	limit := expandLimit
+	for limit > 0 && names.expandPass() {
+		limit--
 	}
 	return names
 }

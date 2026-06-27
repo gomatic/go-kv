@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"gopkg.in/yaml.v3"
@@ -23,7 +24,7 @@ func SetFromFile(target, fileVar string) error {
 	if filename == "" {
 		return nil
 	}
-	content, err := os.ReadFile(filename)
+	content, err := os.ReadFile(filepath.Clean(filename))
 	if err != nil {
 		return fmt.Errorf("%w %s=%q into %s: %w", ErrFileLoad, fileVar, filename, target, err)
 	}
