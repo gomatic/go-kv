@@ -1,4 +1,4 @@
-module github.com/gomatic/kv
+module github.com/gomatic/go-kv
 
 go 1.26.4
 
