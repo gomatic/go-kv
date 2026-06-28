@@ -37,30 +37,30 @@ func Parse(environ []string) Environment {
 }
 
 // Get returns the value for key, or "" when it's not in the map.
-func (e Environment) Get(key string) string { return e[key] }
+func (e Environment) Get(key Name) string { return e[string(key)] }
 
 // Lookup returns the value for key plus whether it was actually in there.
-func (e Environment) Lookup(key string) (string, bool) {
-	value, ok := e[key]
+func (e Environment) Lookup(key Name) (string, bool) {
+	value, ok := e[string(key)]
 	return value, ok
 }
 
 // GetOr returns the value for key, or fallback when it's missing.
-func (e Environment) GetOr(key, fallback string) string {
-	if value, ok := e[key]; ok {
+func (e Environment) GetOr(key Name, fallback string) string {
+	if value, ok := e[string(key)]; ok {
 		return value
 	}
 	return fallback
 }
 
 // First returns the value of the first key that's present, or "".
-func (e Environment) First(keys ...string) string {
+func (e Environment) First(keys ...Name) string {
 	value, _ := e.LookupFirst(keys...)
 	return value
 }
 
 // FirstOr returns the value of the first key that's present, or fallback if none of them are.
-func (e Environment) FirstOr(fallback string, keys ...string) string {
+func (e Environment) FirstOr(fallback string, keys ...Name) string {
 	if value, ok := e.LookupFirst(keys...); ok {
 		return value
 	}
@@ -68,9 +68,9 @@ func (e Environment) FirstOr(fallback string, keys ...string) string {
 }
 
 // LookupFirst returns the value of the first key that's present, plus whether it found one.
-func (e Environment) LookupFirst(keys ...string) (string, bool) {
+func (e Environment) LookupFirst(keys ...Name) (string, bool) {
 	for _, key := range keys {
-		if value, ok := e[key]; ok {
+		if value, ok := e[string(key)]; ok {
 			return value, true
 		}
 	}
