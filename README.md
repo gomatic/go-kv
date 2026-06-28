@@ -1,13 +1,13 @@
 # kv
 
-[![CI](https://github.com/gomatic/kv/actions/workflows/ci.yml/badge.svg)](https://github.com/gomatic/kv/actions/workflows/ci.yml)
+[![CI](https://github.com/gomatic/go-kv/actions/workflows/ci.yml/badge.svg)](https://github.com/gomatic/go-kv/actions/workflows/ci.yml)
 
 Package `kv` provides small, dependency-light helpers for reading and manipulating key/value environment data: an `Environment` map, lookups with fallbacks, loading from JSON/YAML, and scoped set/restore of the process environment.
 
 ## Install
 
 ```bash
-go get github.com/gomatic/kv
+go get github.com/gomatic/go-kv
 ```
 
 Requires Go 1.26+.
