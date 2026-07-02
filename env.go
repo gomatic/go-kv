@@ -55,10 +55,10 @@ func LookupFirst(keys ...Name) (string, bool) {
 
 // SetWithRestore sets the environment variable key to value and hands back a
 // function that puts things back the way they were. If value is empty and
-// allowEmpty is false, key gets unset rather than set to "".
-func SetWithRestore(key Name, value string, allowEmpty AllowEmpty) func() {
+// isAllowEmpty is false, key gets unset rather than set to "".
+func SetWithRestore(key Name, value string, isAllowEmpty AllowEmpty) func() {
 	previous, existed := os.LookupEnv(string(key))
-	if value == "" && !allowEmpty {
+	if value == "" && !isAllowEmpty {
 		_ = os.Unsetenv(string(key))
 	} else {
 		_ = os.Setenv(string(key), value)

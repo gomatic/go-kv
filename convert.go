@@ -7,12 +7,12 @@ import "os"
 // match this signature, so you can hand them straight over — no adapter needed.
 type Convert[T any] func(string) (T, error)
 
-// LookupAs looks up key and runs its value through convert. ok tells you whether
+// LookupAs looks up key and runs its value through convert. isOk tells you whether
 // key was set at all. err is only non-nil when key was set but its value wouldn't
 // convert, and in that case value comes back as the zero value of T.
-func LookupAs[T any](key Name, convert Convert[T]) (value T, ok bool, err error) {
-	raw, ok := os.LookupEnv(string(key))
-	if !ok {
+func LookupAs[T any](key Name, convert Convert[T]) (value T, isOk bool, err error) {
+	raw, isOk := os.LookupEnv(string(key))
+	if !isOk {
 		return value, false, nil
 	}
 	value, err = convert(raw)
