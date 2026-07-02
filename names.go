@@ -50,21 +50,25 @@ func (names Names) expandPass() (Names, bool) {
 	next := make(Names, len(names))
 	for _, key := range slices.Sorted(maps.Keys(names)) {
 		value := names[key]
-		x := os.Expand(key, names.Get)
-		y := os.Expand(value, names.Get)
-		changed = changed || key != x || value != y
-		next[orSelf(x, key)] = orSelf(y, value)
+		x := text(os.Expand(key, names.Get))
+		y := text(os.Expand(value, names.Get))
+		changed = changed || key != string(x) || value != string(y)
+		next[orSelf(x, text(key))] = orSelf(y, text(value))
 	}
 	return next, changed
 }
 
-// orSelf returns expanded, falling back to original when expansion collapsed a
-// non-empty original to the empty string (so a key/value is never lost).
-func orSelf(expanded, original string) string {
+// text is a single map key or value flowing through an expansion pass.
+type text string
+
+// orSelf returns expanded as a plain string, falling back to original when
+// expansion collapsed a non-empty original to the empty string (so a
+// key/value is never lost).
+func orSelf(expanded, original text) string {
 	if expanded == "" && original != "" {
-		return original
+		return string(original)
 	}
-	return expanded
+	return string(expanded)
 }
 
 // Replace swaps out ${VAR}-style references in each of values using Names. It
