@@ -1,19 +1,16 @@
 package kv
 
-// Error is kv's sentinel-error type. Every error the package can throw is
-// declared as a const of this type, so you can match each one with errors.Is
-// rather than comparing strings. It follows the same shape as the rest of the
-// ecosystem's gloo.Error / repl.Error / workgroup.Error.
-type Error string
+import (
+	errs "github.com/gomatic/go-error"
+)
 
-func (e Error) Error() string { return string(e) }
-
-var _ error = Error("")
-
+// Every error the package can throw is declared as a const of the ecosystem's
+// [errs.Const] sentinel type, so you can match each one with errors.Is rather
+// than comparing strings.
 const (
 	// ErrNilReader is what you get when a nil reader is handed to a loader.
-	ErrNilReader Error = "nil reader"
+	ErrNilReader errs.Const = "nil reader"
 	// ErrFileLoad is the leading sentinel we wrap when a source file just won't
 	// load into the target environment variable.
-	ErrFileLoad Error = "could not load"
+	ErrFileLoad errs.Const = "could not load"
 )

@@ -29,7 +29,7 @@ func SetFromFile(target, fileVar Name) error {
 	}
 	content, err := os.ReadFile(filepath.Clean(filename))
 	if err != nil {
-		return fmt.Errorf("%w %s=%q into %s: %w", ErrFileLoad, fileVar, filename, target, err)
+		return ErrFileLoad.With(err, fmt.Sprintf("%s=%q into %s", fileVar, filename, target))
 	}
 	return os.Setenv(string(target), strings.TrimSpace(string(content)))
 }

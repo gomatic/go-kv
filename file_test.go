@@ -2,6 +2,7 @@ package kv
 
 import (
 	"encoding/json"
+	"io/fs"
 	"os"
 	"strings"
 	"testing"
@@ -42,12 +43,15 @@ func TestSetFromFile(t *testing.T) {
 		try.Equal("cats", os.Getenv(target))
 	})
 
-	t.Run("missing file returns ErrFileLoad", func(t *testing.T) {
+	t.Run("missing file returns ErrFileLoad wrapping the cause", func(t *testing.T) {
 		os.Unsetenv(target)
 		t.Cleanup(func() { os.Unsetenv(target) })
 		t.Setenv(fileVar, "testdata/does-not-exist.txt")
 		try := assert.New(t)
-		try.ErrorIs(SetFromFile(target, fileVar), ErrFileLoad)
+		err := SetFromFile(target, fileVar)
+		for _, wantErr := range []error{ErrFileLoad, fs.ErrNotExist} {
+			try.ErrorIs(err, wantErr)
+		}
 	})
 }
 
