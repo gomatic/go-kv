@@ -3,9 +3,9 @@ module github.com/gomatic/go-kv
 go 1.26.4
 
 require (
-	github.com/gomatic/go-error v0.3.7
+	github.com/gomatic/go-error v0.3.10
 	github.com/stretchr/testify v1.11.1
-	go.yaml.in/yaml/v3 v3.0.4
+	go.yaml.in/yaml/v3 v3.0.5
 )
 
 require (
