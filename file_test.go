@@ -49,9 +49,12 @@ func TestSetFromFile(t *testing.T) {
 		t.Setenv(fileVar, "testdata/does-not-exist.txt")
 		try := assert.New(t)
 		err := SetFromFile(target, fileVar)
-		for _, wantErr := range []error{ErrFileLoad, fs.ErrNotExist} {
-			try.ErrorIs(err, wantErr)
-		}
+		// Both must match: ErrFileLoad tells the caller WHICH operation failed,
+		// and the wrapped fs error tells them why. Losing either leaves a
+		// caller unable to distinguish "no such file" from "permission denied"
+		// without parsing the message.
+		try.ErrorIs(err, ErrFileLoad)
+		try.ErrorIs(err, fs.ErrNotExist)
 	})
 }
 
